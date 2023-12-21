@@ -1,0 +1,198 @@
+
+class AbstractKTNode:
+    # Can take any args and kwargs
+    def __init__(self, *args, **kwargs):
+        raise NotImplementedError
+    # Must return dict with no args or kwargs
+    def serialize(self) -> dict:
+        raise NotImplementedError
+    def jserialize(self) -> dict: # Jarvis serializable element
+        raise NotImplementedError
+    def getRID(self) -> str: 
+        raise NotImplementedError
+    def getRef(self) -> str:
+        raise NotImplementedError
+
+    def handle(self, resp, _id):
+        resp["response"].append(self.serialize())
+def idToDict(id_):
+    id_ = id_[1:-1]
+    return {b.split('=')[0]:b.split('=')[1] for b in id_.split(",")}
+
+def dictToId(dic):
+    return "["+",".join((k+"="+v for k, v in dic.items()))+ "]"
+class MediaRefItem(AbstractKTNode):
+    TTL = 10
+    def __init__(self, text, desc, uri, ref):
+        self.text=text
+        self.desc=desc
+        self.uri=uri
+        self.ref = ref
+
+        self.idDict = idToDict(ref)
+    def getRID(self):
+        return self.idDict.get("refid")
+    def getRef(self):
+        return self.ref
+
+    def serialize(self):
+        return {"type": "com.amazon.mediabrowse.referenceitem@3",
+    "text": self.text,
+    "ref": self.ref,
+    "ttl": self.TTS,
+    "csIdSource": None,
+    "csId": None,
+    "image": "https://m.media-amazon.com/images/S/le-target-images-prod/amzn1.dv.gti.a7e58b2f-4f22-48aa-a0c4-55f0acac115f/5/BOXART-16X9/en-US._UR672,378_RI_.png",
+    "qualifiedImage": None,
+    "widescreenImage": None,
+    "backgroundImage": None,
+    "titleImage": None,
+    "treatments": None,
+    "headerText": " ",
+    "description": self.desc,
+    "descriptionHeader": None,
+    "attributes": None,
+    "contentRating": None,
+    "enforcementRating": None,
+    "itemRef": None,
+    "referencedType": "external",
+    "triggers": {
+        "select": {
+            "activity": {
+                "uri": self.uri
+            }
+        }
+    },
+    "previewVideoUrl": None,
+    "previewVideoId": None,
+    "previewVideoProvider": None,
+    "displayAspectRatio": None,
+    "badges": None,
+    "adaptivePreviewVideoUrl": None,
+    "metaData": None,
+    "tags": None}
+
+
+class MediaChannel(AbstractKTNode):
+    TTL = 10
+    def __init__(self, text, ref, elements = None,csId=None):
+        self.text=text
+        self.ref=ref
+        self.csId = csId or "whats-next_bksy"
+        self.elements = elements or []
+
+        self.idDict = idToDict(ref)
+    def getRID(self):
+        return self.idDict.get("refid")
+    def getRef(self):
+        return self.ref
+    def serialize(self):
+        return {
+    "type": "com.amazon.mediabrowse.clientchannel@6",
+    "text": self.text,
+    "ref": self.ref,
+    "ttl": self.TTL,
+    "refs": [element.getRef() for element in elements],
+    "csId": self.csId,
+    "smartlistActions": {
+        "isAddSupported": False,
+        "isRemoveSupported": True,
+        "isNavigateToDetailPageSupported": False
+    },
+    "channelType": "whats-next",
+    "csChannel": {
+        "serializedSymphonyMetrics": None,
+        "symphonyPageId": "client-channels",
+        "isPinned": "true",
+        "symphonySlotId": "center-2",
+        "templateId": "client-channels",
+        "providerType": "SYMPHONY",
+        "symphonyComponentName": "RemoteWidget",
+        "refMarker": self.csId,
+        "subFeedType": "OVERRULED",
+        "topicId": "SYMPHONY:client-channels:"+self.csId,
+        "adsInserted": "0",
+        "contentSource": "TFS",
+        "feedId": "1703190652:4882371426136571308",
+        "symphonyCreativeId": "52854778-c49f-4d20-9de9-8b78b00a29a1",
+        "region": "US-OH",
+        "engagementId": self.csId,
+        "topicRank": "OVERRULED:1"
+    },
+    "csItems": None,
+    "itemHeight": None,
+    "refreshContext": None,
+    "refreshPolicies": None,
+    "ttk": None,
+    "metaData": {},
+    "tags": None
+}
+
+
+
+class RefMenu(AbstractKTNode):
+    TTL = 10
+    def __init__(self, title:str, priority:int, navKey:str, ref:str,csId:str, iconUnicode=None, navMarkers = None, visibility = None, elements = None):
+        self.title = title
+        self.priority=priority
+        self.navKey=navKey
+        self.ref=ref
+        self.csId=csId
+        self.iconUnicode=iconUnicode
+        self.navMarkers=navMarkers
+        self.visibility=visibility or "TAB_ICON"
+        self.elements = elements or []
+
+        self.idDict = idToDict(ref)
+    def getRID(self):
+        return self.idDict.get("refid")
+    def getRef(self):
+        return self.ref
+    def jserialize(self):
+        return {
+            "type": "com.amazon.mediabrowse.screenrefmenuelement@2",
+            "title": self.title,
+            "priority": self.priority,
+            "navKey": self.navKey,
+            "screenRef": self.ref,
+            "iconUnicode": self.iconUnicode,
+            "navMarkers": self.navMarkers,
+            "visibility": self.visibility
+        }
+    def serialize(self):
+        return {
+            "type": "com.amazon.mediabrowse.navmenuscreen@1",
+            "text": self.title,
+            "ref": self.ref,
+            "ttl": self.TTL,
+            "csId": self.csId,
+            "strips": [element.getRef() for element in elements],
+            "bannerAdvertisement": None,
+            "featuredRotatorRef": None,
+            "pills": None,
+            "metaData": None, # Might need to be dict
+            "tags": None,
+            "weblabTreatmentsTriggered": {}
+        }
+
+
+class JarvisRoot(AbstractKTNode):
+    TTL = 10
+    def __init__(self, elements):
+        self.elements = elements
+    def serialize(self): 
+        return {
+        "type": "com.amazon.mediabrowse.browsemenu@2",
+        "text": "menu",
+        "ref": "[reftype=browse/menu,refid=jarvis_root]",
+        "ttl": self.TTL,
+        "elements": [element.jserialize() for element in self.elements],
+        "weblabTreatmentsTriggered": {},
+        "metaData": None,
+        "tags": None
+    }
+    def getRID(self):
+        return "jarvis_root"
+    def getRef(self):
+        return "[reftype=browse/menu,refid=jarvis_root]"
+
