@@ -12,3 +12,8 @@ def KodiUri(uri):
 	print(uri)
 	# ActivateWindow(10025,&quot;plugin://plugin.video.youtube/channel/UCu9ytDtJg8xYtFX8f5UqyeA/playlist/PLAJpD5fqQPsKeWG2hsvxPRhf8nhrNevxK/&quot;,return)
 	return f"amzns://apps/android?p=org.xbmc.kodi#Intent;S.intentToFwd={uri};end"
+
+
+import base64
+
+print(base64.urlsafe_b64encode("ActivateWindow(10025,&quot;plugin://plugin.video.watchnixtoons2/?action=actionEpisodesMenu&amp;url=https%3a%2f%2fwww.wcofun.tv%2fanime%2fattack-on-titan&quot;,return)".encode("utf-8")))
