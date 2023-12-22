@@ -27,7 +27,7 @@ class MediaRefItem(AbstractKTNode):
         self.text=text
         self.desc=desc
         self.uri=uri
-        self.image = image or "https://raw.githubusercontent.com/HeronErin/FuckAmz/main/test_imgs/title_ad_rot.jpg"
+        self.image = image or "https://raw.githubusercontent.com/HeronErin/firemaster/main/test_imgs/title_ad_rot.jpg"
         self.ref = ref
 
         self.idDict = idToDict(ref)
