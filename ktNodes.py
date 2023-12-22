@@ -1,4 +1,4 @@
-
+import time
 class AbstractKTNode:
     # Can take any args and kwargs
     def __init__(self, *args, **kwargs):
@@ -23,10 +23,11 @@ def dictToId(dic):
     return "["+",".join((k+"="+v for k, v in dic.items()))+ "]"
 class MediaRefItem(AbstractKTNode):
     TTL = 10
-    def __init__(self, text, desc, uri, ref):
+    def __init__(self, text, desc, uri, ref, image=None):
         self.text=text
         self.desc=desc
         self.uri=uri
+        self.image = image or "https://raw.githubusercontent.com/HeronErin/FuckAmz/main/test_imgs/title_ad_rot.jpg"
         self.ref = ref
 
         self.idDict = idToDict(ref)
@@ -39,10 +40,10 @@ class MediaRefItem(AbstractKTNode):
         return {"type": "com.amazon.mediabrowse.referenceitem@3",
     "text": self.text,
     "ref": self.ref,
-    "ttl": self.TTS,
+    "ttl": self.TTL,
     "csIdSource": None,
     "csId": None,
-    "image": "https://m.media-amazon.com/images/S/le-target-images-prod/amzn1.dv.gti.a7e58b2f-4f22-48aa-a0c4-55f0acac115f/5/BOXART-16X9/en-US._UR672,378_RI_.png",
+    "image": self.image,
     "qualifiedImage": None,
     "widescreenImage": None,
     "backgroundImage": None,
@@ -88,46 +89,45 @@ class MediaChannel(AbstractKTNode):
         return self.ref
     def serialize(self):
         return {
-    "type": "com.amazon.mediabrowse.clientchannel@6",
+    "type": "com.amazon.mediabrowse.channel@2",
     "text": self.text,
     "ref": self.ref,
     "ttl": self.TTL,
-    "refs": [element.getRef() for element in elements],
-    "csId": self.csId,
+    "refs": [element.getRef() for element in self.elements],
+    "csId": "NAVIGATION:find-page:evergreenRow-v3",
     "smartlistActions": {
         "isAddSupported": False,
-        "isRemoveSupported": True,
+        "isRemoveSupported": False,
         "isNavigateToDetailPageSupported": False
     },
-    "channelType": "whats-next",
     "csChannel": {
-        "serializedSymphonyMetrics": None,
-        "symphonyPageId": "client-channels",
-        "isPinned": "true",
-        "symphonySlotId": "center-2",
-        "templateId": "client-channels",
-        "providerType": "SYMPHONY",
-        "symphonyComponentName": "RemoteWidget",
-        "refMarker": self.csId,
-        "subFeedType": "OVERRULED",
-        "topicId": "SYMPHONY:client-channels:"+self.csId,
+        "refMarker": "NAVIGATION:find-page:evergreenRow-v3",
+        "topicId": "NAVIGATION:find-page:evergreenRow-v3",
         "adsInserted": "0",
         "contentSource": "TFS",
-        "feedId": "1703190652:4882371426136571308",
-        "symphonyCreativeId": "52854778-c49f-4d20-9de9-8b78b00a29a1",
+        "feedId": "1703190681:7906538106279227351",
         "region": "US-OH",
-        "engagementId": self.csId,
-        "topicRank": "OVERRULED:1"
+        "templateId": "find-page",
+        "engagementId": "NAVIGATION:find-page:evergreenRow-v3",
+        "providerType": "NAVIGATION"
     },
     "csItems": None,
+    "subtitle": None,
+    "images": None,
     "itemHeight": None,
+    "isGrid": None,
+    "aspectRatioOverride": None,
     "refreshContext": None,
     "refreshPolicies": None,
     "ttk": None,
-    "metaData": {},
+    "metaData": None,
     "tags": None
 }
 
+    def handle(self, resp, _id):
+        resp["response"].append(self.serialize())
+        for e in self.elements:
+            resp["additional"].append(e.serialize())
 
 
 class RefMenu(AbstractKTNode):
@@ -166,13 +166,15 @@ class RefMenu(AbstractKTNode):
             "ref": self.ref,
             "ttl": self.TTL,
             "csId": self.csId,
-            "strips": [element.getRef() for element in elements],
+            "strips": [element.getRef() for element in self.elements],
             "bannerAdvertisement": None,
             "featuredRotatorRef": None,
             "pills": None,
-            "metaData": None, # Might need to be dict
+            "metaData": {}, # Might need to be dict
             "tags": None,
-            "weblabTreatmentsTriggered": {}
+            "weblabTreatmentsTriggered": {
+                "FTV_CORSERV_EVRGRN_PRELD_758968": "C"
+            }
         }
 
 
