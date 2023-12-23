@@ -8,7 +8,7 @@ def YouTubeVideo(id):
 	return f"amzns://apps/android?p=com.amazon.firetv.youtube#Intent;S.intentToFwd=youtube://youtube.com/watch?v={id};end"
 import base64
 def KodiUri(uri):
-	uri=base64.urlsafe_b64encode('ActivateWindow(10025,"plugin://plugin.video.watchnixtoons2/?action=actionEpisodesMenu&url=https%3a%2f%2fwww.wcofun.tv%2fanime%2fprison-school",return)'.encode("utf-8")).decode("utf-8")
+	uri=base64.urlsafe_b64encode(uri.encode("utf-8")).decode("utf-8")
 	uri = f"plugin://script.redirect.fav/_B64_/{uri}#Intent;component=org.xbmc.kodi/.Splash;end"
 	uri=urllib.parse.quote_plus(uri)
 	print(uri)

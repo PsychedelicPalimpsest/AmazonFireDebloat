@@ -1,7 +1,7 @@
 import json
-from ktNodes import *
+from .ktNodes import *
 from mitmproxy import http
-from intents import *
+from .intents import *
 # print(YouTubeVideo("U94litUpZuc"))
 # RefMenu(title="Kodi Favorites", priority=19400, navKey="KT_NAV_MENU_FIND", ref="[reftype=mb/screen,refid=KODI]", csId="kodi_all_c",
 #             elements=[], iconUnicode="💩")

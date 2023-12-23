@@ -42,40 +42,40 @@ class MediaRefItem(AbstractKTNode):
 
     def serialize(self):
         return {"type": "com.amazon.mediabrowse.referenceitem@3",
-    "text": self.text,
-    "ref": self.ref,
-    "ttl": self.TTL,
-    "csIdSource": None,
-    "csId": None,
-    "image": self.image,
-    "qualifiedImage": None,
-    "widescreenImage": None,
-    "backgroundImage": None,
-    "titleImage": None,
-    "treatments": None,
-    "headerText": " ",
-    "description": self.desc,
-    "descriptionHeader": None,
-    "attributes": None,
-    "contentRating": None,
-    "enforcementRating": None,
-    "itemRef": None,
-    "referencedType": "external",
-    "triggers": {
-        "select": {
-            "activity": {
-                "uri": self.uri
-            }
-        }
-    },
-    "previewVideoUrl": None,
-    "previewVideoId": None,
-    "previewVideoProvider": None,
-    "displayAspectRatio": None,
-    "badges": None,
-    "adaptivePreviewVideoUrl": None,
-    "metaData": None,
-    "tags": None}
+            "text": self.text,
+            "ref": self.ref,
+            "ttl": self.TTL,
+            "csIdSource": None,
+            "csId": None,
+            "image": self.image,
+            "qualifiedImage": None,
+            "widescreenImage": None,
+            "backgroundImage": None,
+            "titleImage": None,
+            "treatments": None,
+            "headerText": " ",
+            "description": self.desc,
+            "descriptionHeader": None,
+            "attributes": None,
+            "contentRating": None,
+            "enforcementRating": None,
+            "itemRef": None,
+            "referencedType": "external",
+            "triggers": {
+                "select": {
+                    "activity": {
+                        "uri": self.uri
+                    }
+                }
+            },
+            "previewVideoUrl": None,
+            "previewVideoId": None,
+            "previewVideoProvider": None,
+            "displayAspectRatio": None,
+            "badges": None,
+            "adaptivePreviewVideoUrl": None,
+            "metaData": None,
+            "tags": None}
 
 
 class MediaChannel(AbstractKTNode):
@@ -93,40 +93,40 @@ class MediaChannel(AbstractKTNode):
         return self.ref
     def serialize(self):
         return {
-    "type": "com.amazon.mediabrowse.channel@2",
-    "text": self.text,
-    "ref": self.ref,
-    "ttl": self.TTL,
-    "refs": [element.getRef() for element in self.elements],
-    "csId": "NAVIGATION:find-page:evergreenRow-v3",
-    "smartlistActions": {
-        "isAddSupported": False,
-        "isRemoveSupported": False,
-        "isNavigateToDetailPageSupported": False
-    },
-    "csChannel": {
-        "refMarker": "NAVIGATION:find-page:evergreenRow-v3",
-        "topicId": "NAVIGATION:find-page:evergreenRow-v3",
-        "adsInserted": "0",
-        "contentSource": "TFS",
-        "feedId": "1703190681:7906538106279227351",
-        "region": "US-OH",
-        "templateId": "find-page",
-        "engagementId": "NAVIGATION:find-page:evergreenRow-v3",
-        "providerType": "NAVIGATION"
-    },
-    "csItems": None,
-    "subtitle": None,
-    "images": None,
-    "itemHeight": None,
-    "isGrid": None,
-    "aspectRatioOverride": None,
-    "refreshContext": None,
-    "refreshPolicies": None,
-    "ttk": None,
-    "metaData": None,
-    "tags": None
-}
+            "type": "com.amazon.mediabrowse.channel@2",
+            "text": self.text,
+            "ref": self.ref,
+            "ttl": self.TTL,
+            "refs": [element.getRef() for element in self.elements],
+            "csId": "NAVIGATION:find-page:evergreenRow-v3",
+            "smartlistActions": {
+                "isAddSupported": False,
+                "isRemoveSupported": False,
+                "isNavigateToDetailPageSupported": False
+            },
+            "csChannel": {
+                "refMarker": "NAVIGATION:find-page:evergreenRow-v3",
+                "topicId": "NAVIGATION:find-page:evergreenRow-v3",
+                "adsInserted": "0",
+                "contentSource": "TFS",
+                "feedId": "1703190681:7906538106279227351",
+                "region": "US-OH",
+                "templateId": "find-page",
+                "engagementId": "NAVIGATION:find-page:evergreenRow-v3",
+                "providerType": "NAVIGATION"
+            },
+            "csItems": None,
+            "subtitle": None,
+            "images": None,
+            "itemHeight": None,
+            "isGrid": None,
+            "aspectRatioOverride": None,
+            "refreshContext": None,
+            "refreshPolicies": None,
+            "ttk": None,
+            "metaData": None,
+            "tags": None
+        }
 
     def handle(self, resp, _id):
         resp["response"].append(self.serialize())
