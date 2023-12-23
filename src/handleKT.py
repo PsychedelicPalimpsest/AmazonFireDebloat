@@ -5,7 +5,7 @@ from .intents import *
 # print(YouTubeVideo("U94litUpZuc"))
 # RefMenu(title="Kodi Favorites", priority=19400, navKey="KT_NAV_MENU_FIND", ref="[reftype=mb/screen,refid=KODI]", csId="kodi_all_c",
 #             elements=[], iconUnicode="💩")
-def generateExampleJarvis():
+def generateExampleJarvis(config):
     return JarvisRoot([
         RefMenu(title="Find", priority=20400, navKey="KT_NAV_MENU_FIND", ref="[reftype=mb/screen,refid=BROWSE]", csId="browse_all"),
         RefMenu(title="Free", priority=20300, navKey="KT_NAV_MENU_FREE", ref="[reftype=mb/screen,refid=FREE]", csId="free_us_tfs",
@@ -17,7 +17,7 @@ def generateExampleJarvis():
         RefMenu(title="My Stuff", priority=19400, navKey="KT_NAV_MENU_LIBRARY", ref="[reftype=mb/screen,refid=LIBRARY]", csId="library_all_c",
             elements=[])
         ])
-def myJarvis():
+def myJarvis(config):
     return JarvisRoot([
         RefMenu(title="Home", priority=20000, navKey="KT_NAV_MENU_HOME", ref="[reftype=mb/screen,refid=HOME_DEFAULT]", navMarkers=["DEFAULT_HIGHLIGHT_SCREEN"], csId="hm_jar_home",
             elements=[
@@ -46,8 +46,8 @@ def queryParent(element, id):
                 if (p:=queryParent(e, id)):
                     return p
 
-root = myJarvis()
-def handleRequest(flow):
+
+def handleRequest(flow, config):
     rJson = {
       "type": "com.amazon.mediabrowse.response@1",
       "response": [],
@@ -58,7 +58,7 @@ def handleRequest(flow):
     print(request)
     for id in request.get("id", []):
         refid = idToDict(id)["refid"]
-        res = query(root, refid)
+        res = query(config.root, refid)
         print("search", refid, res)
         if res is None:
             print("Unknown: ", id)
