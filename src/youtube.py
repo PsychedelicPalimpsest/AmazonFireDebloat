@@ -29,7 +29,7 @@ class YouTubeSubscriptionChannel(RefreshingChannel):
             config.youTubeHandler = YouTubeHandler(config)
         RefreshingChannel.__init__(self, 
             text="Your youtube subscriptions", 
-            ref=f"[reftype=spc,refid={uuid.uuid4().hex}]")
+            ref=f"[reftype=bc,refid={uuid.uuid4().hex}]")
     def refresh(self):
         self.elements=self.config.youTubeHandler.getElements("https://www.youtube.com/feed/subscriptions")
 
@@ -42,7 +42,7 @@ class YouTubeRecomendationChannel(RefreshingChannel):
             config.youTubeHandler = YouTubeHandler(config)
         RefreshingChannel.__init__(self, 
             text="Your youtube recommendendations", 
-            ref=f"[reftype=spc,refid={uuid.uuid4().hex}]")
+            ref=f"[reftype=bc,refid={uuid.uuid4().hex}]")
     def refresh(self):
         self.elements=self.config.youTubeHandler.getElements("https://www.youtube.com/feed/recommended")
 
@@ -77,7 +77,7 @@ class YouTubeHandler:
                   video.get("title"),
                  f"From: {video.get('uploader')}\n{video.get('description')}",
                   YouTubeVideo(video.get('id')), 
-                  f'[reftype=spc,refid=youtube|{video.get("id")}]', 
+                  f'[reftype=mb/item,refid=youtube{video.get("id")}]', 
                   image=f"https://img.youtube.com/vi/{video.get('id')}/mqdefault.jpg")
             mref.TTL=60000 # Youtube videos shouldn't change that much
             elements.append(mref)  
