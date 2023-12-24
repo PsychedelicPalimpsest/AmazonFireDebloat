@@ -29,7 +29,7 @@ class YouTubeSubscriptionChannel(RefreshingChannel):
             config.youTubeHandler = YouTubeHandler(config)
         RefreshingChannel.__init__(self, 
             text="Your youtube subscriptions", 
-            ref=f"[reftype=bc,refid={uuid.uuid4().hex}]")
+            ref=f"[reftype=spc,refid={uuid.uuid4().hex}]")
     def refresh(self):
         self.elements=self.config.youTubeHandler.getElements("https://www.youtube.com/feed/subscriptions")
 
@@ -42,7 +42,7 @@ class YouTubeRecomendationChannel(RefreshingChannel):
             config.youTubeHandler = YouTubeHandler(config)
         RefreshingChannel.__init__(self, 
             text="Your youtube recommendendations", 
-            ref=f"[reftype=bc,refid={uuid.uuid4().hex}]")
+            ref=f"[reftype=spc,refid={uuid.uuid4().hex}]")
     def refresh(self):
         self.elements=self.config.youTubeHandler.getElements("https://www.youtube.com/feed/recommended")
 
