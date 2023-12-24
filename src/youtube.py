@@ -1,4 +1,4 @@
-import os, requests, time
+import os, requests, time, uuid
 from youtube_dl import YoutubeDL
 from youtube_dl.extractor import (
     YoutubeIE,
@@ -29,7 +29,7 @@ class YouTubeSubscriptionChannel(RefreshingChannel):
             config.youTubeHandler = YouTubeHandler(config)
         RefreshingChannel.__init__(self, 
             text="Your youtube subscriptions", 
-            ref="[reftype=bc,refid=youtubesub]")
+            ref=f"[reftype=bc,refid={uuid.uuid4().hex}]")
     def refresh(self):
         self.elements=self.config.youTubeHandler.getElements("https://www.youtube.com/feed/subscriptions")
 
@@ -42,7 +42,7 @@ class YouTubeRecomendationChannel(RefreshingChannel):
             config.youTubeHandler = YouTubeHandler(config)
         RefreshingChannel.__init__(self, 
             text="Your youtube recommendendations", 
-            ref="[reftype=bc,refid=youtuberec]")
+            ref=f"[reftype=bc,refid={uuid.uuid4().hex}]")
     def refresh(self):
         self.elements=self.config.youTubeHandler.getElements("https://www.youtube.com/feed/recommended")
 
