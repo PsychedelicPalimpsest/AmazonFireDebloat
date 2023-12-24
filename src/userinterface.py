@@ -10,8 +10,20 @@ baseMenus = {
     "my_stuff": ["KT_NAV_MENU_LIBRARY", "[reftype=mb/screen,refid=LIBRARY]", "library_all_c"]
 }
 
+class ToolBarChannel(MediaChannel):
+	TTL = 1
+	def __init__(self, *_):
+		MediaChannel.__init__(self, "Toolbar", "[reftype=spc,refid=htoolbar]", elements=[
+				MediaRefItem("Launcher Settings", "Click here to get to the menu to clear the launcher settings",
+					"amzns://apps/android?p=com.amazon.tv.launcher#Intent;action=android.settings.APPLICATION_DETAILS_SETTINGS;end",
+					"[reftype=mb/item,refid=launchersettings]",
+					"https://github.com/HeronErin/AmazonFireDebloat/blob/main/test_imgs/title_ad_rot.jpg?raw=true" )
+
+			])
+
 customRows = {
-	"@recentApps": lambda _: RecentApps("Recently used apps: ", f"[reftype=spc,refid=recentlyused]"),
+	"@recentApps": lambda _, **__: RecentApps("Recently used apps: ", f"[reftype=spc,refid=recentlyused]"),
+	"@toolbar" : ToolBarChannel,
 	"@youtubeSubs": YouTubeSubscriptionChannel,
 	"@youtubeRecomendations": YouTubeRecomendationChannel
 }
@@ -45,7 +57,12 @@ def full_control(config):
 					elements.append(customRows[element](config))
 				else:
 					print(f"Warning: {element} not valid row!")
-
+			elif type(element) is dict:
+				assert "type" in element, f"Must include type in elements of ref menu: {element}"
+				if element["type"] in customRows:
+					elements.append(customRows[element["type"]](config, **element))
+				else:
+					print(f"Warning: {element} not valid row!")
 
 		menu = RefMenu(title=menu.get("name", ""), priority=priority, navKey=kt, ref=ref, csId=csId, elements=elements)
 		jarvis.elements.append(menu)

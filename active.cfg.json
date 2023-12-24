@@ -3,7 +3,8 @@
 	"name": "Default running config",
 	"jarvis": "userinterface/full_control",
 
-	"youtube_cookie_file": "userdata/cookies.txt",
+	"youtube_browser_name": "brave",
+	"youtube_browser_profile" : "~/.config/BraveSoftware/Brave-Browser-Beta/Profile 4/",
 	"update_minutes": 10,
 
 	"root": [
@@ -14,8 +15,8 @@
 			"elements":
 			[
 				"@recentApps",
-				"@youtubeRecomendations",
-				"@youtubeSubs"
+				{"type": "@youtubeRecomendations", "count":15},
+				{"type": "@youtubeSubs", "count":15}
 			]
 		}
 
