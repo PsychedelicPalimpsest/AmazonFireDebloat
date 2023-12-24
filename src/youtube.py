@@ -17,10 +17,10 @@ class RefreshingChannel(MediaChannel):
     def handle(self, resp, _id):
         if self.lastHandle is not None:
             if time.time()-self.lastHandle < self.TTL*60:
-                return MediaChannel.handle(self, resp, _id)
+                resp["response"].append(self.serialize())
         self.refresh()
         self.lastHandle = time.time()
-        MediaChannel.handle(self, resp, _id)
+        resp["response"].append(self.serialize())
 class YouTubeSubscriptionChannel(RefreshingChannel):
     def __init__(self, config):
         self.TTL = 5
