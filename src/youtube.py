@@ -70,7 +70,7 @@ class YouTubeHandler:
         sub = self.ie.extract(url)
         assert "entries" in sub, "YouTube sent a malformed response"
         for i, video in enumerate(sub["entries"]):
-            if i > 50:
+            if i > 20:
                 break
             assert video["_type"] == "url", f"Youtube sent object: {video}"
             mref = MediaRefItem(
@@ -79,7 +79,7 @@ class YouTubeHandler:
                   YouTubeVideo(video.get('id')), 
                   f'[reftype=mb/item,refid=youtube{video.get("id")}]', 
                   image=f"https://img.youtube.com/vi/{video.get('id')}/mqdefault.jpg")
-            mref.TTL=60000 # Youtube videos shouldn't change that much
+            mref.TTL=600 # Youtube videos shouldn't change that much
             elements.append(mref)  
         print(elements)
         return elements

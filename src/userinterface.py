@@ -11,7 +11,7 @@ baseMenus = {
 }
 
 customRows = {
-	"@recentApps": lambda _: RecentApps("Recently used apps: ", f"[reftype=spc,refid={uuid.uuid4().hex}]"),
+	"@recentApps": lambda _: RecentApps("Recently used apps: ", f"[reftype=spc,refid=recentlyused]"),
 	"@youtubeSubs": YouTubeSubscriptionChannel,
 	"@youtubeRecomendations": YouTubeRecomendationChannel
 }

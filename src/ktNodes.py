@@ -134,6 +134,7 @@ class MediaChannel(AbstractKTNode):
             resp["additional"].append(e.serialize())
 
 class RecentApps(MediaChannel):
+    TTL=2000
     def __init__(self, text, ref):
         self.text=text
         self.ref=ref
