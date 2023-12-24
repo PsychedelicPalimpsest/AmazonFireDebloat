@@ -13,6 +13,9 @@ class AbstractKTNode:
     def getRef(self) -> str:
         raise NotImplementedError
 
+    def needsThreading(self):
+        return False
+
     def handle(self, resp, _id):
         resp["response"].append(self.serialize())
 def idToDict(id_):
@@ -30,9 +33,6 @@ class MediaRefItem(AbstractKTNode):
         self.image = image or "https://raw.githubusercontent.com/HeronErin/AmazonFireDebloat/main/test_imgs/title_ad_rot.jpg"
         self.ref = ref
 
-        self.uri=uri
-        self.image = image or "https://raw.githubusercontent.com/HeronErin/AmazonFireDebloat/main/test_imgs/title_ad_rot.jpg"
-        self.ref = ref
 
         self.idDict = idToDict(ref)
     def getRID(self):
@@ -83,7 +83,7 @@ class MediaChannel(AbstractKTNode):
     def __init__(self, text, ref, elements = None,csId=None):
         self.text=text
         self.ref=ref
-        self.csId = csId or "whats-next_bksy"
+        self.csId = csId
         self.elements = elements or []
 
         self.idDict = idToDict(ref)
@@ -133,6 +133,60 @@ class MediaChannel(AbstractKTNode):
         for e in self.elements:
             resp["additional"].append(e.serialize())
 
+class RecentApps(MediaChannel):
+    def __init__(self, text, ref):
+        self.text=text
+        self.ref=ref
+
+        self.idDict = idToDict(ref)
+    def serialize(self):
+        return {
+            "type": "com.amazon.mediabrowse.localdatasourcechannel@1",
+            "text": self.text,
+            "ref": self.ref,
+            "ttl": self.TTL,
+            "refs": [],
+            "csId": "library_recents",
+            "smartlistActions": {
+                "isAddSupported": False,
+                "isRemoveSupported": False,
+                "isNavigateToDetailPageSupported": False
+            },
+            "csChannel": {
+               "symphonyPageId": "library-app-reengagement",
+                "isPinned": "true",
+                "symphonySlotId": "center-0",
+                "templateId": "recent-apps",
+                "providerType": "SYMPHONY",
+                "symphonyComponentName": "Channel",
+                "refMarker": "library_recents",
+                "subFeedType": "OVERRULED",
+                "topicId": "SYMPHONY:recent-apps:library_recents",
+                "adsInserted": "0",
+                "contentSource": "TFS",
+                "feedId": "1703190652:4882371426136571308",
+                "symphonyCreativeId": "b01e4da7-2b4e-40de-900a-70ad150681bd",
+                "region": "US-OH",
+                "engagementId": "library_recents",
+            },
+            "csItems": None,
+            "subtitle": None,
+            "images": None,
+            "categoryId": "cards",
+            "itemHeight": None,
+            "filters": {
+                "subCategoryId": "library @@ recents"
+            },
+            "isGrid": None,
+            "aspectRatioOverride": None,
+            "refreshContext": None,
+            "refreshPolicies": None,
+            "ttk": None,
+            "metaData": None,
+            "tags": None
+        }
+    def handle(self, resp, _id):
+        resp["response"].append(self.serialize())
 
 class RefMenu(AbstractKTNode):
     TTL = 10

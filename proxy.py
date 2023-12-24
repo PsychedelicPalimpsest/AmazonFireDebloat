@@ -1,5 +1,5 @@
 from mitmproxy import http
-from src import handleKT, handleConfig
+from src import handleKT, handleConfig, userinterface
 import os
 
 import asyncio
@@ -41,8 +41,10 @@ if __name__ == "__main__":
     addon.config = handleConfig.Config(open(config_dir, 'r'))
 
     async def asyncMain():
+
         options = main.options.Options(listen_host='0.0.0.0', listen_port=8080)
         m = DumpMaster(options=options)
         m.addons.add(addon)
         await m.run()
-    # loop.run_until_complete(asyncMain())
+    with addon.config:
+        loop.run_until_complete(asyncMain())

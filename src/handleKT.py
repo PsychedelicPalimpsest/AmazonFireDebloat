@@ -1,7 +1,8 @@
-import json
+import json, threading
 from .ktNodes import *
 from mitmproxy import http
 from .intents import *
+from concurrent.futures import ThreadPoolExecutor
 # print(YouTubeVideo("U94litUpZuc"))
 # RefMenu(title="Kodi Favorites", priority=19400, navKey="KT_NAV_MENU_FIND", ref="[reftype=mb/screen,refid=KODI]", csId="kodi_all_c",
 #             elements=[], iconUnicode="💩")
@@ -55,7 +56,8 @@ def handleRequest(flow, config):
     }
 
     request = json.loads(flow.request.text)
-    print(request)
+    print("starting", request)
+    
     for id in request.get("id", []):
         refid = idToDict(id)["refid"]
         res = query(config.root, refid)
@@ -71,7 +73,12 @@ def handleRequest(flow, config):
               "tags": None
             })
         else:
+            # if res.needsThreading:
+            #     pass
+            # else:
             res.handle(rJson, id)
+    print("ended", request, rJson)
+                
 
     flow.response = http.Response.make(200,
         json.dumps(rJson),

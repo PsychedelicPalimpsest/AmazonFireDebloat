@@ -1,4 +1,25 @@
+
 {
 	"name": "Default running config",
-	"jarvis": "handleKT/generateExampleJarvis"
+	"jarvis": "userinterface/full_control",
+
+	"youtube_cookie_file": "userdata/cookies.txt",
+	"update_minutes": 10,
+
+	"root": [
+		{
+			"name": "Custom Firestick",
+			"element_base": "home",
+			"default": true,
+			"elements":
+			[
+				"@recentApps",
+				"@youtubeRecomendations",
+				"@youtubeSubs"
+			]
+		}
+
+	]
+	
 }
+
