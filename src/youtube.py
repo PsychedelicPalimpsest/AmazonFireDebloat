@@ -17,32 +17,32 @@ class RefreshingChannel(MediaChannel):
     def handle(self, resp, _id):
         if self.lastHandle is not None:
             if time.time()-self.lastHandle < self.TTL*60:
-                resp["response"].append(self.serialize())
+                MediaChannel.handle(self, resp, _id)
         self.refresh()
         self.lastHandle = time.time()
-        resp["response"].append(self.serialize())
+        MediaChannel.handle(self, resp, _id)
 class YouTubeSubscriptionChannel(RefreshingChannel):
     def __init__(self, config):
-        self.TTL = 5
+        self.TTL = 10
         self.config=config
         if not hasattr(config, "youTubeHandler"):
             config.youTubeHandler = YouTubeHandler(config)
         RefreshingChannel.__init__(self, 
             text="Your youtube subscriptions", 
-            ref=f"[reftype=bc,refid={uuid.uuid4().hex}]")
+            ref=f"[reftype=bc,refid=youtubesub]")
     def refresh(self):
         self.elements=self.config.youTubeHandler.getElements("https://www.youtube.com/feed/subscriptions")
 
 
 class YouTubeRecomendationChannel(RefreshingChannel):
     def __init__(self, config):
-        self.TTL = 1
+        self.TTL = 5
         self.config=config
         if not hasattr(config, "youTubeHandler"):
             config.youTubeHandler = YouTubeHandler(config)
         RefreshingChannel.__init__(self, 
             text="Your youtube recommendendations", 
-            ref=f"[reftype=bc,refid={uuid.uuid4().hex}]")
+            ref=f"[reftype=bc,refid=youtuberec]")
     def refresh(self):
         self.elements=self.config.youTubeHandler.getElements("https://www.youtube.com/feed/recommended")
 
